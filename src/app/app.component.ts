@@ -17,6 +17,9 @@ export class AppComponent implements OnInit {
 
   taskObject: Task = new Task();
   taskList: ITask[] = [];
+  filteredTaskList: ITask[] = [];
+  filterText: string = '';
+
   ngOnInit(): void {
     this.loadAllTask();
   }
@@ -25,6 +28,7 @@ export class AppComponent implements OnInit {
     this.toDoAPIService.getAllTaskList().subscribe((result: any) => {
       console.log('result', result);
       this.taskList = result.data;
+      this.filteredTaskList = this.taskList;
     });
   }
 
@@ -85,5 +89,11 @@ export class AppComponent implements OnInit {
         }
       );
     }
+  }
+
+  filterTasks() {
+    this.filteredTaskList = this.taskList.filter((task) =>
+      task.taskName.toLowerCase().includes(this.filterText.toLowerCase())
+    );
   }
 }

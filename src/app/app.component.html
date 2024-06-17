@@ -1,34 +1,41 @@
 <div class="container pt-3">
-  <div class="mt-2 p-1 bg-primary text-white rounded text-center">
+  <div class="mt-2 p-1 bg-primary text-white rounded text-center animated-title">
     <h1>ToDo App</h1>
   </div>
+
   <div class="row">
-    <div class="col-5 pt-2">
-      <input type="text" class="form-control" [(ngModel)]="taskObject.taskName" placeholder="Task Name">
+    <div class="col-4 pt-2">
+      <label for="taskName">Task Name</label>
+      <input type="text" class="form-control" id="taskName" [(ngModel)]="taskObject.taskName" placeholder="Task Name">
+    </div>
+    <div class="col-3 pt-2">
+      <label for="dueDate">Due Date</label>
+      <input type="date" class="form-control" id="dueDate" [(ngModel)]="taskObject.dueDate"
+        placeholder="Select Due Date">
     </div>
   </div>
+
   <div class="row">
     <div class="col-12 pt-2">
-      <textarea class="form-control" rows="3" [(ngModel)]="taskObject.taskDescription"
+      <label for="taskDescription">Task Description</label>
+      <textarea class="form-control" id="taskDescription" rows="3" [(ngModel)]="taskObject.taskDescription"
         placeholder="Task Description"></textarea>
     </div>
   </div>
+
+  <div class="col-2 pt-2">
+    @if (taskObject.itemId == 0) {
+    <button class="btn btn-success" (click)="addTask()">Add Task</button>
+    }
+    @else {
+    <button class="btn btn-warning" (click)="updateTask()">Update Task</button>
+    }
+  </div>
+
   <div class="row pt-2">
-    <div class="col-2">
-      <input type="date" class="form-control" id="textDate" [(ngModel)]="taskObject.dueDate" placeholder="Due Date">
-
-    </div>
     <div class="col-6">
-      <input type="text" [(ngModel)]="taskObject.tags" placeholder="Enter Comma Seperated tags" class="form-control">
-    </div>
-    <div class="col">
-      @if (taskObject.itemId==0) {
-      <button class="btn btn-success" (click)="addTask()">Add Task</button>
-      }
-      @else {
-      <button class="btn btn-warning" (click)="updateTask()">Update Task</button>
-      }
-
+      <input type="text" class="form-control" [(ngModel)]="filterText" placeholder="Filter by Task Name"
+        (input)="filterTasks()">
     </div>
   </div>
 
@@ -39,14 +46,15 @@
           <tr>
             <th><strong>Index</strong></th>
             <th><strong>Task Name</strong></th>
+            <th><strong>Task Description</strong></th>
             <th><strong>Due Date</strong></th>
             <th class="text-center"><strong>Actions</strong></th>
           </tr>
         </thead>
         <tbody>
-          @for (item of taskList; track 'itemId') {
+          @for (item of filteredTaskList; track 'itemId') {
           <tr>
-            <td style="text-align: center;">{{$index+1 }}</td>
+            <td style="text-align: center;">{{$index + 1}}</td>
             <td>
               <div class="row">
                 <div class="col-6">
@@ -54,7 +62,14 @@
                 </div>
               </div>
             </td>
-            <td>{{item.dueDate|date:'dd-MMM-yyyy'}}</td>
+            <td>
+              <div class="row">
+                <div class="col-12">
+                  {{item.taskDescription}}
+                </div>
+              </div>
+            </td>
+            <td>{{item.dueDate | date:'dd-MMM-yyyy'}}</td>
             <td class="text-center">
               <button class="btn btn-warning btn-sm rounded-btn" (click)="edit(item)">Edit</button>
             </td>
@@ -63,11 +78,8 @@
             </td>
           </tr>
           }
-
-
         </tbody>
       </table>
     </div>
-
   </div>
 </div>
